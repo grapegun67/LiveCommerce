@@ -1,9 +1,14 @@
 package Live.Commerce.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Getter @Setter
+@Table(name = "orders")
 public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +19,6 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "order_item_id")
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 }
