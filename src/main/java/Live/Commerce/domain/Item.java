@@ -16,8 +16,4 @@ public class Item {
     private String name;
     private int price;
     private int quantity;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_item_id")
-    private OrderItem orderItem;
 }

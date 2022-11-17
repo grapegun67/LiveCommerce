@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderController {
-
     private final OrderService orderService;
     private final MemberService memberService;
     private final ItemService itemService;
@@ -41,10 +40,9 @@ public class OrderController {
                               @RequestParam("itemId") Long itemId,
                               @RequestParam("count") int count) {
 
-        log.info("debug: {} {} {}", memberId, itemId, count);
         Order order = orderService.createOrder(memberId, itemId, count);
-
         orderService.saveOrder(order);
+
         return "redirect:/";
     }
 

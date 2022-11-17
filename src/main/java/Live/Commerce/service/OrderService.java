@@ -34,6 +34,7 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    @Transactional
     public Order createOrder(Long memberId, Long itemId, int count) {
         Member member = memberService.findOne(memberId);
         Item item = itemService.itemFindOne(itemId);
@@ -47,13 +48,11 @@ public class OrderService {
         orderItem.setCount(count);
 
         // 삭제가 이렇게 만들어도 되려나.. 도메인 주도 개발을 적용해야하는데 이건 좀 보완이 필요함
-        itemService.itemCountRemove(itemId);
+        itemService.itemCountRemove(item, count);
 
-        // 매핑 양쪽에 값을 다 넣고 persist해줘야하는구나 이것도 이 위치에 소스를 넣는 것은 별로다
+        // 매핑 양쪽에 값을 다 넣고 persist해줘야하는구나. 이것도 이 위치에 소스를 넣는 것은 별로다
         orderItem.setOrder(order);
         order.getOrderItems().add(orderItem);
-
-        log.info("debug2: price {}", order.getOrderItems().get(0).getOrderPrice());
 
         return order;
     }

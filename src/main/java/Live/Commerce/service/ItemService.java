@@ -28,8 +28,7 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public void itemCountRemove(Long itemId) {
-        Item item = itemFindOne(itemId);
-        item.setQuantity(item.getQuantity() - 1);
+    public void itemCountRemove(Item item, int count) {
+        item.setQuantity(item.getQuantity() - count);
     }
 }
