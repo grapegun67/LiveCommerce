@@ -6,15 +6,15 @@ import Live.Commerce.domain.Order;
 import Live.Commerce.domain.OrderItem;
 import Live.Commerce.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final MemberService memberService;
@@ -38,6 +38,9 @@ public class OrderService {
         Member member = memberService.findOne(memberId);
         Item item = itemService.itemFindOne(itemId);
 
+        Order order = new Order();
+        order.setMember(member);
+
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setOrderPrice(item.getPrice());
@@ -46,15 +49,13 @@ public class OrderService {
         // 삭제가 이렇게 만들어도 되려나.. 도메인 주도 개발을 적용해야하는데 이건 좀 보완이 필요함
         itemService.itemCountRemove(itemId);
 
-        List<OrderItem> orderItems = new ArrayList<>();
-        orderItems.add(orderItem);
+        // 매핑 양쪽에 값을 다 넣고 persist해줘야하는구나 이것도 이 위치에 소스를 넣는 것은 별로다
+        orderItem.setOrder(order);
+        order.getOrderItems().add(orderItem);
 
-        Order order = new Order();
-        order.setMember(member);
-        order.setOrderItems(orderItems);
+        log.info("debug2: price {}", order.getOrderItems().get(0).getOrderPrice());
 
         return order;
     }
-
 
 }

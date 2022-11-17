@@ -22,7 +22,9 @@ public class OrderRepository {
     }
 
     public List<Order> findAll() {
-        return em.createQuery("select o from Order o")
+        //member는 many라서 join을 해줘야하나보네. 아무래도 전반적인 정리가 더 필요해보인다
+        return em.createQuery("select o from Order o join o.member m", Order.class)
                 .getResultList();
     }
+
 }

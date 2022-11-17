@@ -22,7 +22,7 @@ public class ItemRepository {
     }
 
     public List<Item> findAll() {
-        return em.createQuery("select I from Item I")
+        return em.createQuery("select I from Item I", Item.class)
                 .getResultList();
     }
 }

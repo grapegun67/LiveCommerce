@@ -7,6 +7,7 @@ import Live.Commerce.service.ItemService;
 import Live.Commerce.service.MemberService;
 import Live.Commerce.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
@@ -39,16 +41,18 @@ public class OrderController {
                               @RequestParam("itemId") Long itemId,
                               @RequestParam("count") int count) {
 
+        log.info("debug: {} {} {}", memberId, itemId, count);
         Order order = orderService.createOrder(memberId, itemId, count);
 
         orderService.saveOrder(order);
         return "redirect:/";
     }
 
-    @GetMapping("orders")
+    @GetMapping("/orders")
     public String orderList(Model model) {
         List<Order> orders = orderService.findOrderAll();
-        model.addAttribute("orders", orders.get(0));
+        model.addAttribute("orders", orders);
+
         return "order/orderList";
     }
 
